@@ -1,7 +1,7 @@
 %% ------------------------------------------------------------------------
 %
 % DESCRIPTION:
-%   This script applies the contect of the lecture in 
+%   This script applies the contect of the lecture in
 %   Automotive Sensors and Actuators (ASAA) in summer term 2024 on the
 %   context of image processing and color image processing in general.
 %
@@ -9,6 +9,10 @@
 % REQUIRED FILES:
 %   src/pix2world.m
 %   src/world2pix.m
+%   src/projection.m
+%   src/roadSegmentation.m
+%   src/colorSegmentation.m
+%   src/objectSegmentation.m
 %
 % SEE ALSO:
 %   openExample('driving/VisualPerceptionUsingMonoCameraExample')
@@ -22,76 +26,87 @@
 %   02/04/2024
 %
 % LAST MODIFIED:
-%   04/04/2024
+%   05/04/2024
 %
 % ------------------------------------------------------------------------
 
 % Workspace preparation
-close all; 
-clear; 
-clc; 
+close all;
+clear;
+clc;
 addpath(genpath('./src'))
 
-%% ------------------------------------------------------------------------
-% Part 1: Camera calibration
-% ------------------------------------------------------------------------
-%cameraCalibrator
-load("calib\cameraParams.mat");
+inputImage = imread('img/frame_2400.png');
+inputVideo = "./video/ASAA_resized.mp4";
+
+% Set extrinsic parameter of the camera
+height      = 1.89;     % mounting height in meters from the ground
+pitch       = 2;        % pitch of the camera in degrees
+roll        = 4;        % roll of the camera in degrees
+yaw         = -12.4;    % yaw of the camera in degrees
+mounting    = [0, -0.4];
 
 
-% Extrinsic parameter
-height         = 0.94;    % mounting height in meters from the ground
-pitch          = -2;      % pitch of the camera in degrees
-roll           = 4;       % roll of the camera in degrees
-yaw            = 0;       % yaw of the camera in degrees
+mode = 'road_segmentation'; % 'calib', 'projection', 'road_segmentation', 'object_segmentation', 'all'
 
-% Instanciate monocoluar camera sensor
-camIntrinsics = cameraIntrinsics(cameraParams.FocalLength, ...
-                                 cameraParams.PrincipalPoint, ...
-                                 cameraParams.ImageSize);
+switch(mode)
+    case 'calib'
+        cameraCalibrator
+    case 'projection'
+        % Load calibration parameter from previous calibration session
+        load("C:\Users\daniel.schneider\Documents\ADAS\camera_calib_a6\camera_4\cameraParams.mat");
 
-sensor        = monoCamera(camIntrinsics, ...
-                           height, ...
-                           'Pitch', pitch, ...
-                           'Roll', roll, ...
-                           'Yaw', yaw);
+        % Instanciate monocoluar camera sensor
+        camIntrinsics = cameraIntrinsics(cameraParams.FocalLength, ...
+            cameraParams.PrincipalPoint, cameraParams.ImageSize);
 
-% Read image and display the original
-img = imread('img/0001.png');
+        sensor = monoCamera(camIntrinsics, ...
+            height, 'SensorLocation', mounting, ...
+            'Pitch', pitch, 'Roll', roll, 'Yaw', yaw);
 
-figure;
-imshow(img);
-title('Original image')
+        % Display the original image
+        figure
+        imshow(inputImage)
+        title('Original image')
+
+        % Point projection
+        projection(undistortImage(inputImage, cameraParams), sensor, ...
+            10, 0, ...
+            123, 568);
+
+    case 'road_segmentation'
+        roadSegmentation(inputVideo, 12, 300, 80, 100, 1.4, 0.4)
+
+    case 'object_segmentation'
+        % Load calibration parameter from previous calibration session
+        load("C:\Users\daniel.schneider\Documents\ADAS\camera_calib_a6\camera_4\cameraParams.mat");
+        
+        % Instanciate monocoluar camera sensor
+        camIntrinsics = cameraIntrinsics(cameraParams.FocalLength, ...
+            cameraParams.PrincipalPoint, cameraParams.ImageSize);
+
+        sensor = monoCamera(camIntrinsics, ...
+            height, 'SensorLocation', mounting, ...
+            'Pitch', pitch, 'Roll', roll, 'Yaw', yaw);
+
+        objectSegmentation(inputVideo, cameraParams, sensor, 120, 'tiny-yolov4-coco', ...
+            0, 0, ...
+            0, 0, 0, 0, 0, 0); %csp-darknet53-coco
+    case 'all'
+        % Load calibration parameter from previous calibration session
+        load("C:\Users\daniel.schneider\Documents\ADAS\camera_calib_a6\camera_4\cameraParams.mat");
+        
+        % Instanciate monocoluar camera sensor
+        camIntrinsics = cameraIntrinsics(cameraParams.FocalLength, ...
+            cameraParams.PrincipalPoint, cameraParams.ImageSize);
+
+        sensor = monoCamera(camIntrinsics, ...
+            height, 'SensorLocation', mounting, ...
+            'Pitch', pitch, 'Roll', roll, 'Yaw', yaw);
+
+        objectSegmentation(inputVideo, cameraParams, sensor, 120, 'tiny-yolov4-coco', ...
+            0, 1, ...
+            12, 300, 80, 100, 1.4, 0.4); %csp-darknet53-coco
 
 
-%% ------------------------- world2pix -----------------------------------
-% Projection of a given point in world coordinates (X,Y,0) into 
-% pixel coordinates (u,v)
-
-WorldDistance = [2.5 -0.25];
-% Projection
-[u, v] = world2pix(WorldDistance(1), WorldDistance(2), sensor);
-% Draw the projected pixels on the image
-distanceString = sprintf('X: %.1f meters, Y: %.1f meters', WorldDistance);
-Wordl2PixImg = insertMarker(img, [u, v]);
-Wordl2PixImg = insertText(Wordl2PixImg, [u, v] + 5,distanceString);
-% Display the image
-figure
-imshow(Wordl2PixImg)
-title('World 2 Pixel projection')
-
-%% ------------------------- pix2world -----------------------------------
-% Projection of a pixel coordinate (u,v) into 
-% world coordinates (X,Y,0)
-
-ObjectPixel = [1280 1639];
-% Projection
-[world_X, world_Y] = pix2world(ObjectPixel(1), ObjectPixel(2), sensor);
-% Draw the given pixels on the image and augment it with world distance
-Pix2WorldImg = insertMarker(img, ObjectPixel);
-displayText = sprintf('(%.2f m, %.2f m)', [world_X, world_Y]);
-Pix2WorldImg = insertText(Pix2WorldImg, ObjectPixel + 5,displayText);
-% Display the image
-figure
-imshow(Pix2WorldImg)
-title('Pixel 2 World projection')
+end
