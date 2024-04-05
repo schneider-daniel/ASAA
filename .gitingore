@@ -44,3 +44,6 @@ pip-delete-this-directory.txt
 .cache
 nosetests.xml
 coverage.xml
+
+/src/camera_sensor/
+/src/computeVehicleLocations.m
