@@ -46,8 +46,7 @@ roll        = 4;        % roll of the camera in degrees
 yaw         = -12.4;    % yaw of the camera in degrees
 mounting    = [0, -0.4];
 
-
-mode = 'road_segmentation'; % 'calib', 'projection', 'road_segmentation', 'object_segmentation', 'all'
+mode = 'all'; % 'calib', 'projection', 'road_segmentation', 'object_segmentation', 'all'
 
 switch(mode)
     case 'calib'
@@ -89,9 +88,10 @@ switch(mode)
             height, 'SensorLocation', mounting, ...
             'Pitch', pitch, 'Roll', roll, 'Yaw', yaw);
 
-        objectSegmentation(inputVideo, cameraParams, sensor, 120, 'tiny-yolov4-coco', ...
+        objectSegmentation(inputVideo, cameraParams, sensor, 120, 'csp-darknet53-coco', ...
             0, 0, ...
             0, 0, 0, 0, 0, 0); %csp-darknet53-coco
+
     case 'all'
         % Load calibration parameter from previous calibration session
         load("C:\Users\daniel.schneider\Documents\ADAS\camera_calib_a6\camera_4\cameraParams.mat");
@@ -106,7 +106,5 @@ switch(mode)
 
         objectSegmentation(inputVideo, cameraParams, sensor, 120, 'tiny-yolov4-coco', ...
             0, 1, ...
-            12, 300, 80, 100, 1.4, 0.4); %csp-darknet53-coco
-
-
+            12, 300, 80, 100, 1.2, 0.4); %csp-darknet53-coco
 end

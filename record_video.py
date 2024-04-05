@@ -1,10 +1,7 @@
 from pyueye import ueye
 import numpy as np
-import cv2 as cv
 import cv2
-import sys
 import ctypes
-import datetime
 
 def main():
     # Variables
