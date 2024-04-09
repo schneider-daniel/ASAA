@@ -40,7 +40,7 @@ inputImage = imread('img/0001.png');
 inputVideo = "./video/ASAA_2024-04-08-11-52-43_9.mp4";
 
 % Load calibration parameter from previous calibration session
-load("C:\Users\daniel.schneider\Documents\ADAS\ASAA_2024\calib\cameraParams.mat");
+load("./calib/cameraParams.mat");
 
 % Set extrinsic parameter of the camera
 height      = 1.923;     % mounting height in meters from the ground
@@ -49,7 +49,7 @@ roll        = 0;        % roll of the camera in degrees
 yaw         = 0;    % yaw of the camera in degrees
 mounting    = [0, -0.4];
 
-mode = 'projection'; % 'calib', 'projection', 'road_segmentation', 'object_segmentation', 'all'
+mode = 'calib'; % 'calib', 'projection', 'road_segmentation', 'object_segmentation', 'all'
 
 
 switch(mode)
