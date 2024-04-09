@@ -5,7 +5,7 @@ The provided software can be used to address robust (with respect to different l
 
 
 <div style="text-align:center">
-    <img src="doc/segmentation_1.png">
+    <img src="doc/segmentation.gif">
 </div>
 
 ## Color space converstion
