@@ -3,16 +3,17 @@ This repository provides a Matlab-based software project that will be used in th
 
 The provided software can be used to address robust (with respect to different lighting situations) segmentation, e.g. to identify a potentially drivable area in front of a car. Furthermore, we demonstrate the application of the pinhole camera model to determine the distance of an object identified (using YOLOV4/Darknet) in front of the camera. Assuming that the object fits in the ground plane (Z=0), we can estimate the distance (X, Y) of the object (from pixel) with a monocular camera system. 
 
-<div style="text-align:center;">
-    <img src="doc/segmentation_1.png" alt="Image">
+
+<div style="text-align:center">
+    <img src="doc/segmentation_1.png">
 </div>
 
 ## Color space converstion
 TODO
 ## Road segmentation flow
 
-<div style="text-align:center;">
-    <img src="doc/principle_flow-road_segmentation.png" alt="road_segmentation">
+<div style="text-align:center">
+    <img src="doc/principle_flow-road_segmentation.png">
 </div>
 
 ## Color pattern
