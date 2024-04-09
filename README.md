@@ -24,5 +24,5 @@ TODO
 All functions are tested on Matlab 2024a. 
 
 ## Literature
-- [https://link.springer.com/article/10.1007/s11554-008-0078-9](Rotaru et al.)
-- [https://link.springer.com/article/10.1023/B:AURO.0000008673.96984.28](Sotelo et al.)
+- [Rotaru et al.](https://link.springer.com/article/10.1007/s11554-008-0078-9)
+- [Sotelo et al.](https://link.springer.com/article/10.1023/B:AURO.0000008673.96984.28)
