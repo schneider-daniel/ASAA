@@ -37,26 +37,40 @@ for frameIndex = 1:everyImg:numFrames
 
     % Undistort the frame
     frame = undistortImage(frame, cameraParams);
-    [bboxes,scores,labels] = detect(detector, frame);
 
+    % Reduce the search space
+    top_offset = 1000; % Distance from the top of the frame
+    bottom_offset = 400; % Distance from the bottom of the frame
+
+    roi_height = size(frame, 1) - top_offset - bottom_offset;
+    roi_width = size(frame, 2);
+    roi = [0, top_offset, roi_width, roi_height];
+    
+    % Crop the frame to the ROI
+    roi_frame = imcrop(frame, roi);
+ 
+    % Perform object detection within the ROI
+    [bboxes, scores, labels] = detect(detector, roi_frame);
+    
+    % Adjust bounding box coordinates to match original frame coordinates
+    bboxes(:, 2) = bboxes(:, 2) + top_offset; % Adjust x-coordinate
+
+    %[bboxes,scores,labels] = detect(detector, frame);
     locations = computeVehicleLocations(bboxes, sensor);
 
+    % roadSegmentation
+    if roadSeg == 1
+        frame = colorSegmentation(frame, samplePoints, ROIwidth, ROIheight, ROIoffset, SegThresh, HorThresh);
+    end
+    
     for i = 1:size(locations, 1)
         location = locations(i, :);
         class = labels(i, :);
         score = scores(i, :);
         bbox = bboxes(i, :);
 
-        label = sprintf('X=%0.2f, Y=%0.2f, %0.2f%%, %s', ...
-            location(1), location(2),score*100,  class);
-
-        frame = insertObjectAnnotation(frame, ...
-            'rectangle', bbox, label, 'AnnotationColor','red');
-    end
-
-    % roadSegmentation
-    if roadSeg == 1
-        frame = colorSegmentation(frame, samplePoints, ROIwidth, ROIheight, ROIoffset, SegThresh, HorThresh);
+        label = sprintf('X=%0.2f, Y=%0.2f, %0.2f%%, %s', location(1), location(2),score*100, class);
+        frame = insertObjectAnnotation(frame, 'rectangle', bbox, label, 'AnnotationColor','red');
     end
 
     imshow(frame);

@@ -28,7 +28,7 @@ opacity = 0.8; % Drawing opacity
 sampledHSI = zeros(samplePoints, 3);
 
 % Convert the frame to HSI color space
-frameHSI = rgb2hsv(frame);
+frameHSI = RGB2HSI(frame);
 
 % Define area for sampling (bottom center)
 [height, width, ~] = size(frame);
@@ -83,15 +83,20 @@ binaryMask = cat(3, binaryMask, binaryMask, binaryMask);
 % Create a copy of the original frame
 maskedFrame = frame;
 
+% Perform morphological closing to fill gaps within the contour
+binaryMask = imclose(binaryMask, strel('disk', 25));
+
 % Set pixels in the area of interest to a teal color
 maskedFrame(binaryMask) = 255; % Set teal color to maximum intensity
+
+
 
 % Blend original frame with the mask using transparency
 maskedFrame = uint8(opacity * double(maskedFrame) + (1 - opacity) * double(binaryMask) * 255);
 
 % Display the masked frame
-imshow(maskedFrame);
-title('Masked Frame');
+%imshow(maskedFrame);
+%title('Masked Frame');
 
 % Draw rectangle around the sampling area
 rectangle('Position', [startX, startY, ROIwidth, ROIheight], 'EdgeColor', 'b', 'LineWidth', 1);

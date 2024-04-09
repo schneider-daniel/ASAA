@@ -23,7 +23,10 @@ videoObj = VideoReader(videoFile);
 
 % Loop over each frame in the video
 while hasFrame(videoObj)
-    colorSegmentation(readFrame(videoObj), samplePoints, ROIwidth, ROIheight, ROIoffset, SegThresh, HorThresh);
+    frame = colorSegmentation(readFrame(videoObj), samplePoints, ROIwidth, ROIheight, ROIoffset, SegThresh, HorThresh);
+
+    imshow(frame);
+    title('Masked Frame');
 end
 
 
