@@ -31,7 +31,7 @@ def save_frames_from_video(video_path, output_folder, every_img):
     print(f"Frames saved: {frame_count}")
 
 if __name__ == "__main__":
-    video_path = "./video/video.mp4"
+    video_path = "./video/20240408_09-14-54.mp4"
     output_folder = "./img/calib"
     every_img = 24
     save_frames_from_video(video_path, output_folder, every_img)

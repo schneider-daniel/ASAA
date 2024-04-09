@@ -2,6 +2,7 @@ from pyueye import ueye
 import numpy as np
 import cv2
 import ctypes
+from datetime import datetime
 
 def main():
     # Variables
@@ -14,7 +15,9 @@ def main():
 
     fps = 24
     save_path = r'./video/'
-    video_file = "video.mp4"
+
+    from datetime import datetime
+    video_file = datetime.now().strftime("%Y%m%d_%H-%M-%S%z") + ".mp4"
 
     pitch = ueye.INT()
     nBitsPerPixel = ueye.INT(8)  # 24: bits per pixel for color mode; take 8 bits per pixel for monochrome

@@ -36,26 +36,28 @@ clear;
 clc;
 addpath(genpath('./src'))
 
-inputImage = imread('img/frame_2400.png');
-inputVideo = "./video/ASAA_resized.mp4";
+inputImage = imread('img/0001.png');
+inputVideo = "./video/ASAA_2024-04-08-11-52-43_9.mp4";
+
+% Load calibration parameter from previous calibration session
+load("C:\Users\daniel.schneider\Documents\ADAS\ASAA_2024\calib\cameraParams.mat");
 
 % Set extrinsic parameter of the camera
-height      = 1.89;     % mounting height in meters from the ground
-pitch       = 2;        % pitch of the camera in degrees
-roll        = 4;        % roll of the camera in degrees
-yaw         = -12.4;    % yaw of the camera in degrees
+height      = 1.923;     % mounting height in meters from the ground
+pitch       = -1.2;        % pitch of the camera in degrees
+roll        = 0;        % roll of the camera in degrees
+yaw         = 0;    % yaw of the camera in degrees
 mounting    = [0, -0.4];
 
-mode = 'all'; % 'calib', 'projection', 'road_segmentation', 'object_segmentation', 'all'
+mode = 'projection'; % 'calib', 'projection', 'road_segmentation', 'object_segmentation', 'all'
+
 
 switch(mode)
     case 'calib'
         cameraCalibrator
-    case 'projection'
-        % Load calibration parameter from previous calibration session
-        load("C:\Users\daniel.schneider\Documents\ADAS\camera_calib_a6\camera_4\cameraParams.mat");
 
-        % Instanciate monocoluar camera sensor
+    case 'projection'
+       % Instanciate monocoluar camera sensor
         camIntrinsics = cameraIntrinsics(cameraParams.FocalLength, ...
             cameraParams.PrincipalPoint, cameraParams.ImageSize);
 
@@ -71,16 +73,13 @@ switch(mode)
         % Point projection
         projection(undistortImage(inputImage, cameraParams), sensor, ...
             10, 0, ...
-            123, 568);
+            794, 1186);
 
     case 'road_segmentation'
-        roadSegmentation(inputVideo, 12, 300, 80, 100, 1.4, 0.4)
+        roadSegmentation(inputVideo, 12, 300, 80, 850, 1.3, 0.4)
 
     case 'object_segmentation'
-        % Load calibration parameter from previous calibration session
-        load("C:\Users\daniel.schneider\Documents\ADAS\camera_calib_a6\camera_4\cameraParams.mat");
-        
-        % Instanciate monocoluar camera sensor
+        % Create monocoluar camera sensor
         camIntrinsics = cameraIntrinsics(cameraParams.FocalLength, ...
             cameraParams.PrincipalPoint, cameraParams.ImageSize);
 
@@ -93,10 +92,7 @@ switch(mode)
             0, 0, 0, 0, 0, 0); %csp-darknet53-coco
 
     case 'all'
-        % Load calibration parameter from previous calibration session
-        load("C:\Users\daniel.schneider\Documents\ADAS\camera_calib_a6\camera_4\cameraParams.mat");
-        
-        % Instanciate monocoluar camera sensor
+        % Create monocoluar camera sensor
         camIntrinsics = cameraIntrinsics(cameraParams.FocalLength, ...
             cameraParams.PrincipalPoint, cameraParams.ImageSize);
 
@@ -104,7 +100,7 @@ switch(mode)
             height, 'SensorLocation', mounting, ...
             'Pitch', pitch, 'Roll', roll, 'Yaw', yaw);
 
-        objectSegmentation(inputVideo, cameraParams, sensor, 120, 'tiny-yolov4-coco', ...
-            0, 1, ...
-            12, 300, 80, 100, 1.2, 0.4); %csp-darknet53-coco
+        objectSegmentation(inputVideo, cameraParams, sensor, 2, 'csp-darknet53-coco', ...
+            1, 1, ...
+            12, 300, 80, 850, 1.3, 0.4); %csp-darknet53-coco tiny-yolov4-coco
 end
