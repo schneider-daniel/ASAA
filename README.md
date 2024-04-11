@@ -7,19 +7,32 @@ The provided software can be used to address robust (with respect to different l
   <img src="https://raw.githubusercontent.com/schneider-daniel/ASAA/master/doc/segmentation_1.gif" alt="Road segmentation and object detection">
 </p>
 
-## Color space convertion
-TODO
-## Road segmentation flow
+## Road segmentation
+
+### Color space convertion
+The selected color space is HSI which builds from Hue, Saturation and Intensity. It is determined according to 
+### Road segmentation flow
 <p align="center">
     <img src="https://raw.githubusercontent.com/schneider-daniel/ASAA/master/doc/principle_flow-road_segmentation.png">
 </p>
 
-## Color pattern
-TODO
+### Color pattern
+
 ## Probability-based color segmentation
-TODO
+
+### Color model
+<p align="center">
+    <img src="./color_model/cm_red.png" width=100px>
+</p>
+
+### Application
+<p align="center">
+  <img src="./color_model/to_process.PNG">
+  <img src="./color_model/applied_cm.png">
+</p>
+
 ## Software requirements
-All functions are tested on Matlab 2024a. 
+All functions are implemented and tested using either Matlab 2024a or Python 3.8.19.
 
 ## Literature
 - [Rotaru et al.](https://link.springer.com/article/10.1007/s11554-008-0078-9)
