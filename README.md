@@ -25,12 +25,11 @@ $S_i = 1 - \frac{\min(R_i, G-I, B_i) }{I_i}$
 
 $I_i = \frac{R_i + G_i + B_i}{3}$
 
-The goal of this color space convertion is to represent the chromaticity and saturation on the well-known color wheel. The intensity is represented as the height of the resulting pouinted cone. 
+The aim of this color space conversion is to display chromaticity and saturation on the known color wheel. The intensity is represented as the height of the resulting double-peaked cone. 
 
 <p align="center">
     <img src="./doc/hsx-shading.png" width=300px>
 </p>
-
 
 ### Color pattern
 The road color pattern is extracted in an region of interest (ROI) in front of the vehicle, defined as 
