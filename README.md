@@ -17,13 +17,13 @@ The goal of road segmentation is to identify and segment areas in front of the v
 ### Color space convertion
 The color space (HSI) which builds from Hue, Saturation and Intensity is used. It is determined according to [Sotelo et al.](https://link.springer.com/article/10.1023/B:AURO.0000008673.96984.28) as the follows: 
 
-$H = \Theta \text{ if } B_i \leq G_i, \text{ else }  360 - \Theta$
+$$H = \Theta \text{ if } B_i \leq G_i, \text{ else }  360 - \Theta$$ 
 
-$\Theta  = \cos^{-1} \left(\frac{\frac{1}{2}(R_i - G_i) + (R_i - B_i) }{\sqrt{(R_i - G_i)^2 + (R_i - B_i)(G_i - B_i)}} \right)$
+$$\Theta  = \cos^{-1} \left(\frac{\frac{1}{2}(R_i - G_i) + (R_i - B_i) }{\sqrt{(R_i - G_i)^2 + (R_i - B_i)(G_i - B_i)}} \right)$$
 
-$S_i = 1 - \frac{\min(R_i, G-I, B_i) }{I_i}$
+$$S_i = 1 - \frac{\min(R_i, G-I, B_i) }{I_i}$$
 
-$I_i = \frac{R_i + G_i + B_i}{3}$
+$$I_i = \frac{R_i + G_i + B_i}{3}$$
 
 The aim of this color space conversion is to display chromaticity and saturation on the known color wheel. The intensity is represented as the height of the resulting double-peaked cone. 
 
