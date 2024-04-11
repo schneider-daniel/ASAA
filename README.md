@@ -62,7 +62,7 @@ for the respective pixel in the image. The corresponding call in Matlab looks li
 
 ```mask(i, j) = cm(H(i, j), S(i, j));```
 
-The result is a greyscale mask whose normalized values between 0 and 1 correspond to the membership probability for $\mathcal{I}(i, j) $ given $\mathcal{CM}$. 
+The result is a greyscale mask whose normalized values between 0 and 1 correspond to the membership probability for $\mathcal{I}(i, j)$ given $\mathcal{CM}$. 
 
 A result of the applied segmentation is given below.
 <p align="center">
