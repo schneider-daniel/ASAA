@@ -1,5 +1,7 @@
 # Illumination-invariant image processing
-This repository provides a Matlab-based software project that will be used in the lecture "Illumination-invariant image processing" in the course ***"Automotive Sensors and Actuators (ASAA)"*** in the summer term 2024. 
+This repository provides a Matlab-based software project that will be used in the lecture "Illumination-invariant image processing" in the course ***"Automotive Sensors and Actuators (ASAA)"*** in the summer term 2024. The presented slides can be found either in Teach Center or in this repository.
+
+<a href="https://raw.githubusercontent.com/schneider-daniel/ASAA/master/lecture/ASAA_image_proc.pdf" target="_blank" rel="noopener noreferrer">Lecture slides</a>
 
 The provided software can be used to address robust (with respect to different lighting situations) segmentation, e.g. to identify a potentially drivable area in front of a car. Furthermore, we demonstrate the application of the pinhole camera model to determine the distance of an object identified (using YOLOV4/Darknet) in front of the camera. Assuming that the object fits in the ground plane (Z=0), we can estimate the distance (X, Y) of the object (from pixel) with a monocular camera system. In addition, by means of a so-called color-model, we segment defined colored objected in the image. 
 
@@ -28,7 +30,7 @@ $$I_i = \frac{R_i + G_i + B_i}{3}$$
 The aim of this color space conversion is to display chromaticity and saturation on the known color wheel. The intensity is represented as the height of the resulting double-peaked cone. 
 
 <p align="center">
-    <img src="./doc/hsx-shading.png" width=300px>
+    <img src="https://raw.githubusercontent.com/schneider-daniel/ASAA/master/doc/hsx-shading.png" width=300px>
 </p>
 
 ### Color pattern
@@ -66,8 +68,8 @@ The result is a greyscale mask whose normalized values between 0 and 1 correspon
 
 A result of the applied segmentation is given below.
 <p align="center">
-  <img src="./color_model/to_process.PNG">
-  <img src="./color_model/applied_cm.png">
+  <img src="https://raw.githubusercontent.com/schneider-daniel/ASAA/master/color_model/to_process.PNG">
+  <img src="https://raw.githubusercontent.com/schneider-daniel/ASAA/master/color_model/applied_cm.png">
 </p>
 By using an threshold, it is possible to optimize the segmentation.
 
